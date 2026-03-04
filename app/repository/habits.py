@@ -14,10 +14,10 @@ class HabitsRepository(BaseRepository):
 			self, habit_id: int, new_habit_name: str, new_description: str | None
 	) -> Habit | None:
 		stmt = update(Habit).where(Habit.id == habit_id).values(
-			name=habit_name, description=new_description
-		).returning(Habit.id)
+			name=new_habit_name, description=new_description
+		)
 		
-		habit_id = self._db_session.execute(stmt)
+		self._db_session.execute(stmt)
 		self._db_session.commit()
 		return self.get_habit_by_id(habit_id)
 	
