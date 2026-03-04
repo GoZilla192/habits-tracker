@@ -2,8 +2,7 @@ from fastapi import APIRouter, Depends
 
 from app.dependency import get_habits_service
 from app.services.habits import HabitsService
-from app.schemas.habits import HabitsReadSchema, HabitsCreateSchema
-
+from app.schemas.habits import HabitsReadSchema, HabitsCreateSchema, HabitsUpdateSchema
 
 router = APIRouter(tags=["habits"])
 
@@ -15,3 +14,10 @@ def create_habit(habit: HabitsCreateSchema, habits_service: HabitsService = Depe
 def get_habits(habits_service: HabitsService = Depends(get_habits_service)):
 	return habits_service.get_list_habits()
 	
+@router.put(path="/habits/{habit_id}")
+def update_habit(
+		habit_id: int,
+		body: HabitsUpdateSchema,
+        habits_service: HabitsService = Depends(get_habits_service)
+):
+	return habits_service.update_habit(habit_id, body)
