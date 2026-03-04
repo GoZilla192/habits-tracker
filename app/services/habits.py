@@ -17,3 +17,7 @@ class HabitsService:
 			created_at=habit_model.created_at
 		)
 	
+	def get_list_habits(self) -> list[HabitsReadSchema]:
+		return [
+			HabitsReadSchema.model_validate(habit_model) for habit_model in self.habit_repo.get_habits()
+		]
