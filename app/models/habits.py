@@ -12,5 +12,5 @@ class Habit(Base):
 	id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
 	name: Mapped[str] = mapped_column(String(100), nullable=False)
 	description: Mapped[str] = mapped_column(String(500), nullable=True)
-	created_at: Mapped[datetime.date] = mapped_column(server_default=func.current_date())
+	created_at: Mapped[datetime.date] = mapped_column(server_default=func.now())
 	
