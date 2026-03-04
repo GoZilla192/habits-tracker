@@ -13,4 +13,4 @@ class Checkin(Base):
 	habit_id: Mapped[int] = mapped_column(
 		ForeignKey("habits.id", ondelete="CASCADE", onupdate="CASCADE")
 	)
-	checkin_date: Mapped[datetime.date]
+	checkin_date: Mapped[datetime.date] = mapped_column(server_default=func.now())
