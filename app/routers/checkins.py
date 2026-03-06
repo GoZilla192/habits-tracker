@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, status, HTTPException
 
 from app.dependency import get_checkins_service
-from app.exceptions import CheckinAlreadyExists
+from app.exceptions import CheckinAlreadyExists, WrongDateFormat
 from app.services.checkins import CheckinsService
 
 router = APIRouter(tags=["Checkins"])
@@ -24,5 +24,12 @@ def delete_checkin(
 		date: str,
 		checkins_service: CheckinsService = Depends(get_checkins_service)
 ):
-	checkins_service.delete_checkin(habit_id=habit_id, date=date)
-	
+	try:
+		checkins_service.delete_checkin(habit_id=habit_id, date=date)
+	except WrongDateFormat:
+		raise HTTPException(
+			status_code=status.HTTP_400_BAD_REQUEST,
+			detail="Wrong date format. "
+			       "Expected date format: 'yyyy-mm-dd', "
+			       "Examples: '2026-03-05', '2026-12-01' "
+		)
