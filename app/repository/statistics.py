@@ -7,20 +7,20 @@ from app.models.habits import Habit
 
 
 class StatisticsRepository(BaseRepository):
-	def get_statistic(
+	async def get_statistic(
 			self,
 			habit_id: int,
 			date_from: datetime.date,
 			date_to: datetime.date
 	) -> dict[[str, int | float | None]]:
 		return {
-			"percent_checkins": self._get_percent_checkins(habit_id, date_from, date_to),
-			"max_streak": self._get_max_streak(habit_id, date_from, date_to),
-			"curr_streak": self._get_curr_streak(habit_id, date_from, date_to),
+			"percent_checkins": await self._get_percent_checkins(habit_id, date_from, date_to),
+			"max_streak": await self._get_max_streak(habit_id, date_from, date_to),
+			"curr_streak": await self._get_curr_streak(habit_id, date_from, date_to),
 		}
 	
 	
-	def _get_percent_checkins(
+	async def _get_percent_checkins(
 			self,
 			habit_id: int,
 			date_from: datetime.date,
@@ -42,10 +42,10 @@ class StatisticsRepository(BaseRepository):
 			)
 		)
 		
-		return self._db_session.execute(query).scalar_one_or_none()
+		return (await self._db_session.execute(query)).scalar_one_or_none()
 	
 	
-	def _get_max_streak(
+	async def _get_max_streak(
 			self,
 			habit_id: id,
 			date_from: datetime.date,
@@ -96,10 +96,10 @@ class StatisticsRepository(BaseRepository):
 			.group_by(subquery2.c.habit_id)
 		)
 		
-		return self._db_session.execute(query).scalar_one_or_none()
+		return (await self._db_session.execute(query)).scalar_one_or_none()
 		
 		
-	def _get_curr_streak(
+	async def _get_curr_streak(
 			self,
 			habit_id: id,
 			date_from: datetime.date,
@@ -122,4 +122,4 @@ class StatisticsRepository(BaseRepository):
 		
 		query = select(func.count()).where(subquery.c.diff == subquery.c.rn)
 		
-		return self._db_session.execute(query).scalar_one_or_none()
+		return (await self._db_session.execute(query)).scalar_one_or_none()

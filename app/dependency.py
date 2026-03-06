@@ -1,6 +1,6 @@
 from fastapi import Depends
 
-from app.database.accessor import get_db_session
+from app.database.accessor import get_sync_db_session, get_async_db_session
 from app.repository.checkins import CheckinsRepository
 from app.repository.habits import HabitsRepository
 from app.repository.statistics import StatisticsRepository
@@ -9,15 +9,16 @@ from app.services.checkins import CheckinsService
 from app.services.statistics import StatisticsService
 
 
-def get_habits_repository(db_session = Depends(get_db_session)):
+
+def get_habits_repository(db_session = Depends(get_async_db_session)):
 	return HabitsRepository(db_session=db_session)
 
 
-def get_checkins_repository(db_session = Depends(get_db_session)):
+def get_checkins_repository(db_session = Depends(get_async_db_session)):
 	return CheckinsRepository(db_session=db_session)
 
 
-def get_statistics_repository(db_session = Depends(get_db_session)):
+def get_statistics_repository(db_session = Depends(get_async_db_session)):
 	return StatisticsRepository(db_session=db_session)
 
 

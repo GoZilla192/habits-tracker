@@ -7,17 +7,17 @@ from app.schemas.habits import HabitsReadSchema, HabitsCreateSchema, HabitsUpdat
 router = APIRouter(tags=["habits"])
 
 @router.post(path="/habit", response_model=HabitsReadSchema)
-def create_habit(habit: HabitsCreateSchema, habits_service: HabitsService = Depends(get_habits_service)):
-	return habits_service.create_habit(habit=habit)
+async def create_habit(habit: HabitsCreateSchema, habits_service: HabitsService = Depends(get_habits_service)):
+	return await habits_service.create_habit(habit=habit)
 
 @router.get(path="/habits", response_model=list[HabitsReadSchema])
-def get_habits(habits_service: HabitsService = Depends(get_habits_service)):
-	return habits_service.get_list_habits()
+async def get_habits(habits_service: HabitsService = Depends(get_habits_service)):
+	return await habits_service.get_list_habits()
 	
 @router.put(path="/habits/{habit_id}")
-def update_habit(
+async def update_habit(
 		habit_id: int,
 		body: HabitsUpdateSchema,
         habits_service: HabitsService = Depends(get_habits_service)
 ):
-	return habits_service.update_habit(habit_id, body)
+	return await habits_service.update_habit(habit_id, body)
